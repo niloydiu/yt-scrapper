@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# macOS
+.DS_Store
+
+# Editor directories and files
+.vscode/
+*.swp
+
+# Python packaging
+build/
+dist/
+eggs/
+*.egg-info/
+
+# Logs
+*.log
+
+# Optional: keep extraction data if you want to track it
+# data/extraction.json
