@@ -2,6 +2,8 @@ import os
 import logging
 from flask import Flask, request, render_template_string, send_file, jsonify
 from scraper import get_video_metadata
+from transcripts import fetch_transcript_and_translation
+from parser import extract_ingredients
 from utils import save_records_to_json
 
 APP_DIR = os.path.dirname(__file__)
@@ -86,6 +88,57 @@ INDEX_HTML = '''
         color: var(--accent-muted);
         max-width: 500px;
         margin: 0 auto 48px;
+      }
+
+      /* Features Section */
+      .features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        margin-bottom: 48px;
+        text-align: left;
+      }
+
+      @media (max-width: 768px) {
+        .features { grid-template-columns: 1fr; }
+      }
+
+      .feature-card {
+        background: rgba(255,255,255,0.02);
+        border: 1px solid var(--border);
+        padding: 24px;
+        border-radius: 20px;
+        transition: all 0.2s;
+      }
+
+      .feature-card:hover {
+        background: rgba(255,255,255,0.04);
+        border-color: #3f3f46;
+      }
+
+      .feature-icon {
+        width: 40px;
+        height: 40px;
+        background: #18181b;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+        color: #fff;
+        font-size: 20px;
+      }
+
+      .feature-card h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .feature-card p {
+        font-size: 13px;
+        color: var(--accent-muted);
+        line-height: 1.6;
       }
 
       /* Main Input Card */
@@ -430,7 +483,25 @@ INDEX_HTML = '''
       <header>
         <div class="badge">ULTRA PRO EXTRACTOR</div>
         <h1>YouTube Pro</h1>
-        <p class="subtitle">The most powerful way to extract metadata from channels, playlists, and videos.</p>
+        <p class="subtitle">The most powerful way to extract metadata and recipe intelligence from YouTube.</p>
+        
+        <div class="features">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-lightning-charge"></i></div>
+            <h3>Deep Metadata</h3>
+            <p>Extract 50+ fields including tags, categories, and high-res thumbnails for every video.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-egg"></i></div>
+            <h3>Recipe Intelligence</h3>
+            <p>Automatically parse transcripts to extract ingredients and measurements from cooking videos.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="bi bi-filetype-json"></i></div>
+            <h3>Clean Export</h3>
+            <p>Download everything as structured JSON, ready for your database or research projects.</p>
+          </div>
+        </div>
       </header>
 
       <div class="main-card">
@@ -517,9 +588,11 @@ INDEX_HTML = '''
           <div class="card-content">
             <div class="card-title" onclick="window.open('${video.youtubeVideoLink}', '_blank')">${video.title}</div>
             <div class="card-footer">
-              <span class="video-id">${video.videoId}</span>
+              <a href="/video/${video.videoId}" class="btn-view-yt" target="_blank" style="color: #fff;">
+                <i class="bi bi-egg-fill"></i> Ingredients
+              </a>
               <a href="${video.youtubeVideoLink}" class="btn-view-yt" target="_blank">
-                <i class="bi bi-youtube"></i> View
+                <i class="bi bi-youtube"></i> YouTube
               </a>
             </div>
           </div>
@@ -647,6 +720,164 @@ def download(filename):
     file_path = os.path.join(DATA_DIR, filename)
     if not os.path.exists(file_path): return 'Not found', 404
     return send_file(file_path, as_attachment=True)
+
+# Recipe Intelligence View
+INGREDIENTS_HTML = '''
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recipe Intelligence - {{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg: #030303;
+        --card-bg: #0a0a0a;
+        --accent: #ffffff;
+        --accent-muted: #a1a1aa;
+        --border: #27272a;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background: var(--bg);
+        color: #fafafa;
+        padding: 40px 20px;
+        line-height: 1.6;
+      }
+      .container { max-width: 800px; margin: 0 auto; }
+      .header { margin-bottom: 40px; }
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #18181b;
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--accent-muted);
+        margin-bottom: 16px;
+      }
+      h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.02em; }
+      .meta { color: var(--accent-muted); font-size: 14px; margin-bottom: 32px; }
+      
+      .section {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 32px;
+        margin-bottom: 32px;
+      }
+      .section-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .ingredient-list {
+        list-style: none;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 600px) { .ingredient-list { grid-template-columns: 1fr; } }
+      .ingredient-item {
+        background: #111;
+        border: 1px solid var(--border);
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .ingredient-item i { color: var(--accent-muted); }
+      
+      .no-data {
+        text-align: center;
+        padding: 40px;
+        color: var(--accent-muted);
+      }
+      .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--accent-muted);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 24px;
+      }
+      .btn-back:hover { color: #fff; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="javascript:window.close()" class="btn-back"><i class="bi bi-arrow-left"></i> Close Tab</a>
+      
+      <div class="header">
+        <div class="badge">RECIPE INTELLIGENCE</div>
+        <h1>{{ title }}</h1>
+        <div class="meta">Video ID: {{ video_id }}</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <i class="bi bi-egg-fill"></i> Extracted Ingredients
+        </div>
+        {% if ingredients %}
+          <ul class="ingredient-list">
+            {% for item in ingredients %}
+              <li class="ingredient-item">
+                <i class="bi bi-check2-circle"></i>
+                {{ item }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="no-data">
+            <i class="bi bi-search" style="font-size: 24px; display: block; margin-bottom: 12px;"></i>
+            No ingredients could be automatically extracted from the transcript.
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <i class="bi bi-info-circle-fill"></i> How it works
+        </div>
+        <p style="font-size: 14px; color: var(--accent-muted);">
+          Our AI-powered engine analyzes the video transcript in real-time, identifying culinary terms, measurements, and food items. 
+          This allows you to quickly see what you need without watching the entire video.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+'''
+
+@app.route('/video/<video_id>')
+def video_details(video_id):
+    try:
+        # Fetch transcript
+        transcript_data = fetch_transcript_and_translation(video_id)
+        full_text = " ".join([t['text'] for t in transcript_data])
+        
+        # Extract ingredients
+        ingredients = extract_ingredients(full_text)
+        
+        # We don't have the title here easily without re-scraping, 
+        # but we can just show the ID or a placeholder for now.
+        # In a real app, we'd pass the title from the frontend or cache it.
+        return render_template_string(INGREDIENTS_HTML, 
+                                    title="Video Recipe Analysis", 
+                                    video_id=video_id, 
+                                    ingredients=ingredients)
+    except Exception as e:
+        return f"Error analyzing video: {str(e)}", 500
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000, debug=True)
