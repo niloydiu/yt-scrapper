@@ -23,7 +23,7 @@ from PyQt6.QtWidgets import (
     QFileDialog,
 )
 
-from scraper import get_video_urls
+from scraper import get_video_metadata
 from transcripts import fetch_transcript_and_translation
 from parser import extract_ingredients
 from utils import save_records_to_json
@@ -45,46 +45,39 @@ class Worker(QThread):
 
     def run(self):
         try:
-            self.status.emit("Extracting video list from channel...")
-            video_urls = get_video_urls(self.channel_url)
-            total = len(video_urls)
+            self.status.emit("Extracting video metadata...")
+            videos = get_video_metadata(self.channel_url)
+            total = len(videos)
             self.status.emit(f"Found {total} videos")
             results = []
 
-            for idx, vurl in enumerate(video_urls, start=1):
+            for idx, video in enumerate(videos, start=1):
                 if not self._is_running:
                     break
 
-                self.status.emit(f"Processing ({idx}/{total}): {vurl}")
-                # Extract video id from url
-                parsed = urlparse(vurl)
-                q = parse_qs(parsed.query)
-                vid = q.get("v", [None])[0]
-                if not vid:
-                    # try to take last path part
-                    vid = parsed.path.split("/")[-1]
+                vurl = video['youtubeVideoLink']
+                vid = video['videoId']
+                self.status.emit(f"Processing ({idx}/{total}): {video['title']}")
 
                 try:
                     transcript_text, translation_text = fetch_transcript_and_translation(vid)
                 except Exception as e:
-                    # handle videos with no transcript or other errors
-                    tb = traceback.format_exc()
                     self.status.emit(f"No transcript for {vid}: {str(e)}")
                     transcript_text = ""
                     translation_text = ""
 
                 ingredients = extract_ingredients(translation_text or transcript_text)
 
-                record = {
+                # Merge metadata with transcript/ingredients
+                video.update({
                     "id": idx,
-                    "youtubeVideoLink": vurl,
                     "transcript": transcript_text,
                     "translation": translation_text,
                     "ingredients": ingredients,
-                }
-                results.append(record)
+                })
+                results.append(video)
 
-                # write partial results each step (safe for interruptions)
+                # write partial results each step
                 try:
                     save_records_to_json(results, self.out_file)
                 except Exception as e:

@@ -43,7 +43,7 @@ def get_video_metadata(channel_url):
         List of dicts with all possible metadata fields from yt-dlp
     """
     # Force /videos tab if user just provides channel URL
-    if '@' in channel_url and '/videos' not in channel_url and '/shorts' not in channel_url:
+    if '@' in channel_url and '/videos' not in channel_url and '/shorts' not in channel_url and '/streams' not in channel_url:
         if not channel_url.endswith('/'):
             channel_url += '/videos'
         else:
@@ -61,10 +61,19 @@ def get_video_metadata(channel_url):
     with YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(channel_url, download=False)
 
-    entries = info.get("entries") or []
+    # Handle single video vs playlist/channel
+    if "entries" in info:
+        entries = info.get("entries") or []
+    else:
+        # It's a single video
+        entries = [info]
+        
     results = []
     
     for e in entries:
+        if not e:
+            continue
+            
         vid = e.get("id") or e.get("url")
         if not vid:
             continue
