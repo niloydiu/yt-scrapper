@@ -221,24 +221,32 @@ INDEX_HTML = '''
       .stats-pill {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 24px;
         background: #111;
         border: 1px solid var(--border);
-        padding: 6px 6px 6px 20px;
+        padding: 8px 8px 8px 24px;
         border-radius: 100px;
-        font-size: 14px;
-        font-weight: 600;
       }
 
       .stats-count {
-        color: #fff;
         display: flex;
-        align-items: center;
-        gap: 8px;
+        flex-direction: column;
+        line-height: 1;
       }
 
-      .stats-count i {
+      .stats-count .num {
+        font-size: 18px;
+        font-weight: 800;
+        color: #fff;
+      }
+
+      .stats-count .label {
+        font-size: 10px;
+        font-weight: 700;
         color: var(--accent-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 2px;
       }
 
       .btn-download-all {
@@ -466,10 +474,10 @@ INDEX_HTML = '''
         </div>
         
         <div class="stats-pill">
-          <span class="stats-count" id="countDisplay">
-            <i class="bi bi-collection-play"></i>
-            <span>0 Videos</span>
-          </span>
+          <div class="stats-count" id="countDisplay">
+            <span class="num">0</span>
+            <span class="label">Videos Extracted</span>
+          </div>
           <a href="#" id="dlAllBtn" class="btn-download-all" target="_blank">
             <i class="bi bi-cloud-arrow-down-fill"></i>
             Download JSON
@@ -560,7 +568,7 @@ INDEX_HTML = '''
           renderResults(allVideos);
           
           resultsHeader.style.display = 'flex';
-          countDisplay.querySelector('span').textContent = `${data.count} Videos`;
+          countDisplay.querySelector('.num').textContent = data.count;
           dlAllBtn.href = `/download/${data.filename}`;
 
           setTimeout(() => {
@@ -591,7 +599,7 @@ INDEX_HTML = '''
         const term = e.target.value.toLowerCase();
         const filtered = allVideos.filter(v => v.title.toLowerCase().includes(term));
         renderResults(filtered);
-        countDisplay.querySelector('span').textContent = `${filtered.length} Videos`;
+        countDisplay.querySelector('.num').textContent = filtered.length;
       });
 
       extractBtn.addEventListener('click', startExtraction);
