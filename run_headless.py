@@ -9,19 +9,10 @@ import sys
 import time
 from urllib.parse import urlparse, parse_qs
 
-from scraper import get_video_urls
+from scraper import get_video_metadata
 from transcripts import fetch_transcript_and_translation
 from parser import extract_ingredients
 from utils import save_records_to_json
-
-
-def extract_video_id(vurl):
-    parsed = urlparse(vurl)
-    q = parse_qs(parsed.query)
-    vid = q.get("v", [None])[0]
-    if not vid:
-        vid = parsed.path.split("/")[-1]
-    return vid
 
 
 def main():
@@ -32,15 +23,17 @@ def main():
     channel = sys.argv[1]
     out_file = sys.argv[2] if len(sys.argv) > 2 else "data.json"
 
-    print(f"Extracting video list from: {channel}")
-    video_urls = get_video_urls(channel)
-    total = len(video_urls)
+    print(f"Extracting video metadata from: {channel}")
+    videos = get_video_metadata(channel)
+    total = len(videos)
     print(f"Found {total} videos")
 
     results = []
-    for idx, vurl in enumerate(video_urls, start=1):
-        print(f"[{idx}/{total}] {vurl}")
-        vid = extract_video_id(vurl)
+    for idx, video in enumerate(videos, start=1):
+        vurl = video['youtubeVideoLink']
+        vid = video['videoId']
+        print(f"[{idx}/{total}] {video['title']}")
+        
         try:
             transcript_text, translation_text = fetch_transcript_and_translation(vid)
         except Exception as e:
@@ -50,14 +43,13 @@ def main():
 
         ingredients = extract_ingredients(translation_text or transcript_text)
 
-        record = {
+        video.update({
             "id": idx,
-            "youtubeVideoLink": vurl,
             "transcript": transcript_text,
             "translation": translation_text,
             "ingredients": ingredients,
-        }
-        results.append(record)
+        })
+        results.append(video)
 
         try:
             save_records_to_json(results, out_file)
@@ -65,7 +57,7 @@ def main():
             print(f"  Failed saving JSON so far: {e}")
 
         # small pause to be polite
-        time.sleep(0.2)
+        time.sleep(0.1)
 
     print(f"Finished. Saved {len(results)} records to {out_file}")
 

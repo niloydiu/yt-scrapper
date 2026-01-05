@@ -15,7 +15,7 @@ from urllib.parse import urlparse, parse_qs
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
-from scraper import get_video_urls
+from scraper import get_video_metadata
 from transcripts import fetch_transcript_and_translation
 from parser import extract_ingredients
 from utils import save_records_to_json
@@ -37,22 +37,19 @@ class WorkerThread(threading.Thread):
 
     def run(self):
         try:
-            self.update_queue.put(("status", "Extracting video list from channel..."))
-            video_urls = get_video_urls(self.channel_url)
-            total = len(video_urls)
+            self.update_queue.put(("status", "Extracting video metadata..."))
+            videos = get_video_metadata(self.channel_url)
+            total = len(videos)
             self.update_queue.put(("status", f"Found {total} videos"))
             results = []
 
-            for idx, vurl in enumerate(video_urls, start=1):
+            for idx, video in enumerate(videos, start=1):
                 if self.stopped():
                     break
-                self.update_queue.put(("status", f"Processing ({idx}/{total}): {vurl}"))
-
-                parsed = urlparse(vurl)
-                q = parse_qs(parsed.query)
-                vid = q.get("v", [None])[0]
-                if not vid:
-                    vid = parsed.path.split("/")[-1]
+                
+                vurl = video['youtubeVideoLink']
+                vid = video['videoId']
+                self.update_queue.put(("status", f"Processing ({idx}/{total}): {video['title']}"))
 
                 try:
                     transcript_text, translation_text = fetch_transcript_and_translation(vid)
@@ -63,14 +60,13 @@ class WorkerThread(threading.Thread):
 
                 ingredients = extract_ingredients(translation_text or transcript_text)
 
-                record = {
+                video.update({
                     "id": idx,
-                    "youtubeVideoLink": vurl,
                     "transcript": transcript_text,
                     "translation": translation_text,
                     "ingredients": ingredients,
-                }
-                results.append(record)
+                })
+                results.append(video)
 
                 try:
                     save_records_to_json(results, self.out_file)
