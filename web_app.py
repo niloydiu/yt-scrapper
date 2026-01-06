@@ -39,6 +39,7 @@ INDEX_HTML = '''
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>YT Extractor Pro</title>
+    <link rel="icon" href="/static/logo.svg" type="image/svg+xml">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -311,7 +312,7 @@ INDEX_HTML = '''
 
     <div class="container">
       <header>
-        <div class="brand-badge"><img src="/static/logo.png" alt="logo" style="height:20px; border-radius:6px; margin-right:8px;"> YT EXTRACTOR PRO</div>
+        <div class="brand-badge"><img src="/static/logo.svg" alt="logo" style="height:20px; border-radius:6px; margin-right:8px;"> YT EXTRACTOR PRO</div>
         <h1>Extract. Analyze. Share.</h1>
         <p class="subtitle">Turn any YouTube channel into structured data. Get metadata, transcripts, and extracted items in seconds.</p>
       
