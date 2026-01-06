@@ -38,7 +38,7 @@ INDEX_HTML = '''
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Niloy Kumar Mohonta — YouTube Data Explorer</title>
+    <title>Niloy — YT Scrapper</title>
     <link rel="icon" href="/static/logo.svg" type="image/svg+xml">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">

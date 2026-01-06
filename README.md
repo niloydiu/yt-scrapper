@@ -27,11 +27,13 @@ Notes
 -- The app uses `yt-dlp` to list videos from a channel and `youtube-transcript-api` to fetch transcripts.
 
 Contact & branding
+
 - Portfolio: https://niloykm.vercel.app
 - Email: niloykumarmohonta@gmail.com
 - GitHub: https://github.com/niloydiu
 
 Deploying to Render (free tier)
+
 1. Push your repo to GitHub (already done).
 2. Sign in to https://render.com and create a new **Web Service**.
 3. Connect the service to the `main` branch of this repository.
