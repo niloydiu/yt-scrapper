@@ -305,65 +305,114 @@ INDEX_HTML = '''
       
       .actions-mt { margin-top: 32px; display: flex; gap: 12px; justify-content: flex-end; }
       .hero-meta { font-size: 16px; color: var(--text-muted); margin-top: 12px; }
+      
+      /* FOOTER */
       footer {
-        margin-top: 128px;
-        padding: 64px 0 48px;
+        margin-top: 160px;
+        padding: 80px 0 64px;
         border-top: 1px solid var(--border-color);
+        background: linear-gradient(180deg, transparent 0%, rgba(15,15,15,0.4) 100%);
       }
-      .footer-grid {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 64px;
-        align-items: flex-start;
+      .footer-container {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
       }
-      @media (max-width: 768px) {
-        .footer-grid { grid-template-columns: 1fr; gap: 48px; }
-        .footer-links { flex-direction: column; gap: 32px; }
+      .footer-brand {
+        margin-bottom: 48px;
       }
       .footer-brand h2 {
-        font-size: 32px;
-        font-weight: 800;
-        letter-spacing: -0.04em;
-        margin-bottom: 12px;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin-bottom: 16px;
         color: #fff;
+        background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
       .footer-brand p {
         color: var(--text-muted);
-        max-width: 440px;
-        font-size: 16px;
-        line-height: 1.6;
+        font-size: 15px;
+        line-height: 1.7;
+        max-width: 520px;
+        margin: 0 auto;
+      }
+      .footer-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, var(--border-color) 50%, transparent 100%);
+        margin: 48px 0;
       }
       .footer-links {
         display: flex;
-        gap: 80px;
+        justify-content: center;
+        gap: 48px;
+        flex-wrap: wrap;
+        margin-bottom: 48px;
       }
-      .footer-col {
+      .footer-link-item {
         display: flex;
         flex-direction: column;
-        gap: 16px;
-      }
-      .footer-col h4 {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--text-muted);
-        margin-bottom: 4px;
-      }
-      .footer-col a {
-        color: #fff;
+        align-items: center;
+        gap: 8px;
         text-decoration: none;
-        font-size: 15px;
-        font-weight: 600;
-        transition: all 0.2s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 20px 32px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid transparent;
+      }
+      .footer-link-item:hover {
+        background: rgba(255,255,255,0.05);
+        border-color: rgba(255,255,255,0.1);
+        transform: translateY(-2px);
+      }
+      .footer-link-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.06);
         display: flex;
         align-items: center;
-        gap: 12px;
+        justify-content: center;
+        transition: all 0.3s;
       }
-      .footer-col a i { font-size: 18px; color: var(--text-muted); transition: color 0.2s; }
-      .footer-col a:hover { color: #fff; }
-      .footer-col a:hover i { color: var(--accent); }
-      .footer-col a:hover { transform: translateX(4px); }
+      .footer-link-item:hover .footer-link-icon {
+        background: rgba(59,130,246,0.15);
+        transform: scale(1.1);
+      }
+      .footer-link-icon i {
+        font-size: 20px;
+        color: var(--text-muted);
+        transition: color 0.3s;
+      }
+      .footer-link-item:hover .footer-link-icon i {
+        color: var(--accent);
+      }
+      .footer-link-label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        transition: color 0.3s;
+      }
+      .footer-link-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        transition: color 0.3s;
+      }
+      .footer-link-item:hover .footer-link-label,
+      .footer-link-item:hover .footer-link-value {
+        color: #fff;
+      }
+      @media (max-width: 768px) {
+        footer { margin-top: 120px; padding: 60px 0 48px; }
+        .footer-brand h2 { font-size: 24px; }
+        .footer-links { flex-direction: column; gap: 16px; }
+        .footer-link-item { padding: 16px 24px; width: 100%; }
+      }
     </style>
   </head>
   <body>
@@ -409,28 +458,38 @@ INDEX_HTML = '''
     </div>
 
     <footer>
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h2>Niloy Kumar Mohonta</h2>
-          <p>YouTube metadata, transcripts, and extracted items — curated by Niloy.</p>
-        </div>
-        <div class="footer-links">
-          <div class="footer-col">
-            <h4>Contact</h4>
-            <a href="mailto:niloykumarmohonta@gmail.com">
-              <i class="bi bi-envelope-at"></i>
-              niloykumarmohonta@gmail.com
-            </a>
-            <a href="https://niloykm.vercel.app" target="_blank" rel="noreferrer">
-              <i class="bi bi-arrow-up-right-circle"></i>
-              Connect with Niloy
-            </a>
+      <div class="container">
+        <div class="footer-container">
+          <div class="footer-brand">
+            <h2>Niloy Kumar Mohonta</h2>
+            <p>YouTube metadata, transcripts, and extracted items — curated by Niloy.</p>
           </div>
-          <div class="footer-col">
-            <h4>Social</h4>
-            <a href="https://github.com/niloydiu" target="_blank" rel="noreferrer">
-              <i class="bi bi-github"></i>
-              github.com/niloydiu
+          
+          <div class="footer-divider"></div>
+          
+          <div class="footer-links">
+            <a href="mailto:niloykumarmohonta@gmail.com" class="footer-link-item">
+              <div class="footer-link-icon">
+                <i class="bi bi-envelope-at-fill"></i>
+              </div>
+              <span class="footer-link-label">Email</span>
+              <span class="footer-link-value">niloykumarmohonta@gmail.com</span>
+            </a>
+            
+            <a href="https://niloykm.vercel.app" target="_blank" rel="noreferrer" class="footer-link-item">
+              <div class="footer-link-icon">
+                <i class="bi bi-globe2"></i>
+              </div>
+              <span class="footer-link-label">Portfolio</span>
+              <span class="footer-link-value">niloykm.vercel.app</span>
+            </a>
+            
+            <a href="https://github.com/niloydiu" target="_blank" rel="noreferrer" class="footer-link-item">
+              <div class="footer-link-icon">
+                <i class="bi bi-github"></i>
+              </div>
+              <span class="footer-link-label">GitHub</span>
+              <span class="footer-link-value">github.com/niloydiu</span>
             </a>
           </div>
         </div>
