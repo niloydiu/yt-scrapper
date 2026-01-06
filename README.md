@@ -1,6 +1,6 @@
-# YouTube Recipe Ingredient Extractor
+# YouTube Extractor
 
-Simple PyQt6 desktop app that extracts video URLs from a YouTube channel, fetches transcripts, optionally translates them to English, extracts ingredient lists, and saves results to a JSON file.
+Simple app that extracts video URLs from a YouTube channel, fetches transcripts, optionally translates them to English, extracts structured items from transcripts, and saves results to a JSON file.
 
 Setup
 
@@ -14,19 +14,15 @@ pip install -r requirements.txt
 
 2. Run the app:
 
-PyQt6 (may require system GL libraries):
+This repository now runs as a Flask web app. To try locally:
 
 ```bash
-python app.py
-```
-
-Tkinter (lighter-weight alternative, recommended if PyQt6 fails):
-
-```bash
-python app_tk.py
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python web_app.py
 ```
 
 Notes
-- Ingredient extraction uses a simple heuristic by default. For better accuracy, enable `openai` usage in `parser.py` and provide an API key.
-- If you encounter errors importing PyQt6 (for example `libGL.so.1` missing), prefer running the Tkinter UI via `app_tk.py` which avoids those system dependencies.
-- The app uses `yt-dlp` (Python library) to list videos from a channel and `youtube-transcript-api` to fetch transcripts.
+- Item extraction uses simple heuristics in `parser.py`. For improved accuracy, integrate a better NLP model.
+- The app uses `yt-dlp` to list videos from a channel and `youtube-transcript-api` to fetch transcripts.

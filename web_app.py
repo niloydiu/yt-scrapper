@@ -38,7 +38,7 @@ INDEX_HTML = '''
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Recipe Extractor Pro</title>
+    <title>YT Extractor Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -311,17 +311,17 @@ INDEX_HTML = '''
 
     <div class="container">
       <header>
-        <div class="brand-badge"><i class="bi bi-youtube"></i> RECIPE EXTRACTOR PRO</div>
-        <h1>Extract. Analyze. Cook.</h1>
-        <p class="subtitle">Turn any YouTube cooking channel into a structured database. Get metadata, transcripts, and ingredients in seconds.</p>
+        <div class="brand-badge"><img src="/static/logo.png" alt="logo" style="height:20px; border-radius:6px; margin-right:8px;"> YT EXTRACTOR PRO</div>
+        <h1>Extract. Analyze. Share.</h1>
+        <p class="subtitle">Turn any YouTube channel into structured data. Get metadata, transcripts, and extracted items in seconds.</p>
       
         <div class="search-wrapper">
           <div class="search-box">
             <input id="urlInput" class="search-input" type="text" placeholder="Paste Channel or Playlist URL...">
             <button id="searchBtn" class="btn-search" onclick="fetchMetadata()">Search</button>
           </div>
-          <div class="flow-steps" style="margin-top:12px; text-align:center; color:var(--text-muted); font-size:13px;">
-            <strong>Quick Steps:</strong> 1) Search &nbsp;→&nbsp; 2) Select videos &nbsp;→&nbsp; 3) Click "Fetch Info" to retrieve transcripts/ingredients &nbsp;→&nbsp; 4) Export or open Shopping List
+            <div class="flow-steps" style="margin-top:12px; text-align:center; color:var(--text-muted); font-size:13px;">
+            <strong>Quick Steps:</strong> 1) Search &nbsp;→&nbsp; 2) Select videos &nbsp;→&nbsp; 3) Click "Fetch Info" to retrieve transcripts &amp; extracted items &nbsp;→&nbsp; 4) Export or open Aggregated Items
           </div>
         </div>
 
@@ -357,9 +357,9 @@ INDEX_HTML = '''
           <i class="bi bi-magic"></i> Fetch Info
         </button>
 
-        <!-- Shopping List -->
-        <button id="shoppingBtn" class="btn-fab secondary" onclick="openShoppingList()" title="Open aggregated shopping list from selected videos">
-          <i class="bi bi-basket"></i> Shopping List
+        <!-- Aggregated Items -->
+        <button id="shoppingBtn" class="btn-fab secondary" onclick="openShoppingList()" title="Open aggregated items from selected videos">
+          <i class="bi bi-basket"></i> Aggregated Items
         </button>
         
         <!-- Export -->
@@ -394,7 +394,7 @@ INDEX_HTML = '''
             <label class="check-item"><input type="checkbox" checked value="link"> Link</label>
             <label class="check-item"><input type="checkbox" value="id"> Video ID</label>
             <label class="check-item"><input type="checkbox" value="duration"> Duration</label>
-            <label class="check-item"><input type="checkbox" checked value="ingredients"> Ingredients</label>
+            <label class="check-item"><input type="checkbox" checked value="ingredients"> Items</label>
             <label class="check-item"><input type="checkbox" checked value="transcript"> Transcript</label>
           </div>
         </div>
@@ -411,11 +411,11 @@ INDEX_HTML = '''
     <div id="shopModal" class="modal-backdrop" onclick="closeModal(event, 'shopModal')">
       <div class="modal-window">
         <div class="modal-header">
-          <h2 class="modal-title">Shopping List</h2>
+          <h2 class="modal-title">Aggregated Items</h2>
           <button class="btn-close" onclick="closeModal(null, 'shopModal')"><i class="bi bi-x"></i></button>
         </div>
         <p style="color:#a1a1aa; font-size:13px; margin-bottom:16px;">
-          Aggregated ingredients from selected videos. Note: These are extracted using heuristics and may contain non-food words.
+          Aggregated extracted items from selected videos. Note: These are extracted using heuristics and may contain non-relevant words.
         </p>
         <div id="shopListContent" class="modal-content-scroll" style="max-height: 400px;">
           <!-- Items go here -->
@@ -621,10 +621,10 @@ INDEX_HTML = '''
                 const a = document.createElement('a');
                 a.href = url;
                 
-                // Extention
+                // Extension
                 let ext = format;
                 // filename
-                a.download = `recipe_export_${Date.now()}.${ext}`;
+                a.download = `export_${Date.now()}.${ext}`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -772,7 +772,7 @@ def format_text_output(videos, fields):
 def create_docx(videos, fields):
     if not Document: return None
     doc = Document()
-    doc.add_heading('YouTube Recipe Export', 0)
+    doc.add_heading('YouTube Export', 0)
     doc.add_paragraph(f"Generated on {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     
     for v in videos:
@@ -915,7 +915,7 @@ def api_export():
             return send_file(
                 file_stream,
                 as_attachment=True,
-                download_name='recipes.docx',
+                download_name='export.docx',
                 mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             )
             
