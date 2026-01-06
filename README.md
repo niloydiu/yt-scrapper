@@ -1,6 +1,6 @@
-# YouTube Extractor
+# Niloy Kumar Mohonta — YouTube Data Extractor
 
-Simple app that extracts video URLs from a YouTube channel, fetches transcripts, optionally translates them to English, extracts structured items from transcripts, and saves results to a JSON file.
+Niloy Kumar Mohonta curates this simple web app that extracts YouTube video metadata, fetches transcripts (with optional translation), highlights structured items, and saves results to JSON/CSV/TXT/DOCX.
 
 Setup
 
@@ -25,6 +25,11 @@ python web_app.py
 
 Notes
 -- The app uses `yt-dlp` to list videos from a channel and `youtube-transcript-api` to fetch transcripts.
+
+Contact & branding
+- Portfolio: https://niloykm.vercel.app
+- Email: niloykumarmohonta@gmail.com
+- GitHub: https://github.com/niloydiu
 
 Deploying to Render (free tier)
 1. Push your repo to GitHub (already done).

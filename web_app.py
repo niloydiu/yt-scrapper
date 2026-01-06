@@ -38,7 +38,7 @@ INDEX_HTML = '''
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>YT Extractor Pro</title>
+    <title>Niloy Kumar Mohonta — YouTube Data Explorer</title>
     <link rel="icon" href="/static/logo.svg" type="image/svg+xml">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -304,6 +304,22 @@ INDEX_HTML = '''
       .shop-list-item:last-child { border-bottom: none; }
       
       .actions-mt { margin-top: 32px; display: flex; gap: 12px; justify-content: flex-end; }
+      .hero-meta { font-size: 16px; color: var(--text-muted); margin-top: 12px; }
+      footer {
+        margin-top: 96px;
+        padding: 32px 0 24px;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+      .footer-left { font-size: 14px; }
+      .footer-left strong { color: #fff; }
+      .footer-links { display: flex; gap: 14px; font-size: 14px; }
+      .footer-links a { color: var(--text-muted); text-decoration: none; }
+      .footer-links a:hover { color: #fff; }
     </style>
   </head>
   <body>
@@ -312,9 +328,12 @@ INDEX_HTML = '''
 
     <div class="container">
       <header>
-        <div class="brand-badge"><img src="/static/logo.svg" alt="logo" style="height:20px; border-radius:6px; margin-right:8px;"> YT EXTRACTOR PRO</div>
-        <h1>Extract. Analyze. Share.</h1>
-        <p class="subtitle">Turn any YouTube channel into structured data. Get metadata, transcripts, and extracted items in seconds.</p>
+        <div class="brand-badge"><img src="/static/logo.svg" alt="logo" style="height:20px; border-radius:6px; margin-right:8px;"> Niloy Kumar Mohonta</div>
+        <h1>Capture YouTube metadata with confidence.</h1>
+        <p class="subtitle">Niloy Kumar Mohonta makes it easy to turn any YouTube channel into structured metadata, narratives, and extracted highlights.</p>
+        <p class="hero-meta">
+          Reach Niloy at <a href="mailto:niloykumarmohonta@gmail.com" style="color:#f3f4f6; text-decoration:underline;">niloykumarmohonta@gmail.com</a> — <a href="https://niloykm.vercel.app" style="color:#f3f4f6; text-decoration:underline;" target="_blank" rel="noreferrer">niloykm.vercel.app</a>
+        </p>
       
         <div class="search-wrapper">
           <div class="search-box">
@@ -344,6 +363,19 @@ INDEX_HTML = '''
 
       <div id="grid" class="grid"></div>
     </div>
+
+    <footer>
+      <div class="footer-left">
+        <strong>Niloy Kumar Mohonta</strong><br>
+        YouTube metadata, transcripts, and extracted items — curated by Niloy.<br>
+        Email: <a href="mailto:niloykumarmohonta@gmail.com">niloykumarmohonta@gmail.com</a>
+      </div>
+      <div class="footer-links">
+        <a href="https://niloykm.vercel.app" target="_blank" rel="noreferrer">Portfolio</a>
+        <a href="https://github.com/niloydiu" target="_blank" rel="noreferrer">GitHub</a>
+        <span>github.com/niloydiu</span>
+      </div>
+    </footer>
 
     <!-- FLOATING ACTION BAR -->
     <div id="fabBar" class="fab-bar">
