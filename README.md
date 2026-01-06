@@ -24,5 +24,24 @@ python web_app.py
 ```
 
 Notes
-- Item extraction uses simple heuristics in `parser.py`. For improved accuracy, integrate a better NLP model.
-- The app uses `yt-dlp` to list videos from a channel and `youtube-transcript-api` to fetch transcripts.
+-- The app uses `yt-dlp` to list videos from a channel and `youtube-transcript-api` to fetch transcripts.
+
+Deploying to Render (free tier)
+1. Push your repo to GitHub (already done).
+2. Sign in to https://render.com and create a new **Web Service**.
+3. Connect the service to the `main` branch of this repository.
+4. Set the **Build Command** to:
+
+```
+pip install -r requirements.txt
+```
+
+and the **Start Command** to:
+
+```
+gunicorn web_app:app --bind 0.0.0.0:$PORT --workers 2
+```
+
+5. Choose the **Free** plan and create the service — Render will build and run the app. Add a custom domain under the service settings if desired; Render will guide you through DNS records and provide a free TLS certificate.
+
+Notes: Free Render instances may idle and cold-start after inactivity. If you want a site that doesn't sleep, consider a paid plan or other providers.

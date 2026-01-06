@@ -1,0 +1,9 @@
+# Optional Render service definition template. Use this in the Render dashboard if you want to deploy using a manifest.
+services:
+  - type: web
+    name: yt-extractor
+    env: python
+    region: oidc
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn web_app:app --bind 0.0.0.0:$PORT --workers 2
