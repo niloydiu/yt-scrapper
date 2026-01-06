@@ -424,9 +424,6 @@ INDEX_HTML = '''
         <div class="brand-badge"><img src="/static/logo.svg" alt="logo" style="height:20px; border-radius:6px; margin-right:8px;"> Niloy Kumar Mohonta</div>
         <h1>Capture YouTube metadata with confidence.</h1>
         <p class="subtitle">Niloy has made it easy to turn any YouTube channel into structured metadata, narratives, and extracted highlights.</p>
-        <p class="hero-meta">
-          Reach Niloy at <a href="mailto:niloykumarmohonta@gmail.com" style="color:#f3f4f6; text-decoration:underline;">niloykumarmohonta@gmail.com</a> — <a href="https://niloykm.vercel.app" style="color:#f3f4f6; text-decoration:underline;" target="_blank" rel="noreferrer">niloykm.vercel.app</a>
-        </p>
       
         <div class="search-wrapper">
           <div class="search-box">
