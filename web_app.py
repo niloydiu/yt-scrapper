@@ -306,43 +306,64 @@ INDEX_HTML = '''
       .actions-mt { margin-top: 32px; display: flex; gap: 12px; justify-content: flex-end; }
       .hero-meta { font-size: 16px; color: var(--text-muted); margin-top: 12px; }
       footer {
-        margin-top: 96px;
-        padding: 32px 0 24px;
+        margin-top: 128px;
+        padding: 64px 0 48px;
         border-top: 1px solid var(--border-color);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 32px;
       }
-      .footer-left { font-size: 14px; max-width: 360px; line-height: 1.6; }
-      .footer-left strong { display: block; font-size: 16px; margin-bottom: 6px; }
-      .footer-link { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: #fff; }      
-      .footer-right {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-end;
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 64px;
+        align-items: flex-start;
       }
-      .footer-meta {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        font-size: 13px;
-        color: var(--text-muted);
-        gap: 4px;
+      @media (max-width: 768px) {
+        .footer-grid { grid-template-columns: 1fr; gap: 48px; }
+        .footer-links { flex-direction: column; gap: 32px; }
       }
-      .btn-link {
-        border: 1px solid var(--border-color);
-        padding: 10px 18px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.06);
+      .footer-brand h2 {
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin-bottom: 12px;
         color: #fff;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s ease;
       }
-      .btn-link:hover { background: rgba(255,255,255,0.12); }
+      .footer-brand p {
+        color: var(--text-muted);
+        max-width: 440px;
+        font-size: 16px;
+        line-height: 1.6;
+      }
+      .footer-links {
+        display: flex;
+        gap: 80px;
+      }
+      .footer-col {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .footer-col h4 {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+      }
+      .footer-col a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .footer-col a i { font-size: 18px; color: var(--text-muted); transition: color 0.2s; }
+      .footer-col a:hover { color: #fff; }
+      .footer-col a:hover i { color: var(--accent); }
+      .footer-col a:hover { transform: translateX(4px); }
     </style>
   </head>
   <body>
@@ -388,16 +409,30 @@ INDEX_HTML = '''
     </div>
 
     <footer>
-      <div class="footer-left">
-        <strong>Niloy Kumar Mohonta</strong>
-        <p>YouTube metadata, transcripts, and extracted items — curated by Niloy.</p>
-        <a class="footer-link" href="mailto:niloykumarmohonta@gmail.com">niloykumarmohonta@gmail.com</a>
-      </div>
-      <div class="footer-right">
-        <a class="btn-link" href="https://niloykm.vercel.app" target="_blank" rel="noreferrer">Connect with Niloy</a>
-        <div class="footer-meta">
-          <span>GitHub</span>
-          <a href="https://github.com/niloydiu" target="_blank" rel="noreferrer">github.com/niloydiu</a>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>Niloy Kumar Mohonta</h2>
+          <p>YouTube metadata, transcripts, and extracted items — curated by Niloy.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Contact</h4>
+            <a href="mailto:niloykumarmohonta@gmail.com">
+              <i class="bi bi-envelope-at"></i>
+              niloykumarmohonta@gmail.com
+            </a>
+            <a href="https://niloykm.vercel.app" target="_blank" rel="noreferrer">
+              <i class="bi bi-arrow-up-right-circle"></i>
+              Connect with Niloy
+            </a>
+          </div>
+          <div class="footer-col">
+            <h4>Social</h4>
+            <a href="https://github.com/niloydiu" target="_blank" rel="noreferrer">
+              <i class="bi bi-github"></i>
+              github.com/niloydiu
+            </a>
+          </div>
         </div>
       </div>
     </footer>
