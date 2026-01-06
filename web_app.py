@@ -313,13 +313,36 @@ INDEX_HTML = '''
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 16px;
+        gap: 32px;
       }
-      .footer-left { font-size: 14px; }
-      .footer-left strong { color: #fff; }
-      .footer-links { display: flex; gap: 14px; font-size: 14px; }
-      .footer-links a { color: var(--text-muted); text-decoration: none; }
-      .footer-links a:hover { color: #fff; }
+      .footer-left { font-size: 14px; max-width: 360px; line-height: 1.6; }
+      .footer-left strong { display: block; font-size: 16px; margin-bottom: 6px; }
+      .footer-link { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: #fff; }      
+      .footer-right {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end;
+      }
+      .footer-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        font-size: 13px;
+        color: var(--text-muted);
+        gap: 4px;
+      }
+      .btn-link {
+        border: 1px solid var(--border-color);
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.06);
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+      .btn-link:hover { background: rgba(255,255,255,0.12); }
     </style>
   </head>
   <body>
@@ -330,7 +353,7 @@ INDEX_HTML = '''
       <header>
         <div class="brand-badge"><img src="/static/logo.svg" alt="logo" style="height:20px; border-radius:6px; margin-right:8px;"> Niloy Kumar Mohonta</div>
         <h1>Capture YouTube metadata with confidence.</h1>
-        <p class="subtitle">Niloy Kumar Mohonta makes it easy to turn any YouTube channel into structured metadata, narratives, and extracted highlights.</p>
+        <p class="subtitle">Niloy has made it easy to turn any YouTube channel into structured metadata, narratives, and extracted highlights.</p>
         <p class="hero-meta">
           Reach Niloy at <a href="mailto:niloykumarmohonta@gmail.com" style="color:#f3f4f6; text-decoration:underline;">niloykumarmohonta@gmail.com</a> — <a href="https://niloykm.vercel.app" style="color:#f3f4f6; text-decoration:underline;" target="_blank" rel="noreferrer">niloykm.vercel.app</a>
         </p>
@@ -366,14 +389,16 @@ INDEX_HTML = '''
 
     <footer>
       <div class="footer-left">
-        <strong>Niloy Kumar Mohonta</strong><br>
-        YouTube metadata, transcripts, and extracted items — curated by Niloy.<br>
-        Email: <a href="mailto:niloykumarmohonta@gmail.com">niloykumarmohonta@gmail.com</a>
+        <strong>Niloy Kumar Mohonta</strong>
+        <p>YouTube metadata, transcripts, and extracted items — curated by Niloy.</p>
+        <a class="footer-link" href="mailto:niloykumarmohonta@gmail.com">niloykumarmohonta@gmail.com</a>
       </div>
-      <div class="footer-links">
-        <a href="https://niloykm.vercel.app" target="_blank" rel="noreferrer">Portfolio</a>
-        <a href="https://github.com/niloydiu" target="_blank" rel="noreferrer">GitHub</a>
-        <span>github.com/niloydiu</span>
+      <div class="footer-right">
+        <a class="btn-link" href="https://niloykm.vercel.app" target="_blank" rel="noreferrer">Connect with Niloy</a>
+        <div class="footer-meta">
+          <span>GitHub</span>
+          <a href="https://github.com/niloydiu" target="_blank" rel="noreferrer">github.com/niloydiu</a>
+        </div>
       </div>
     </footer>
 
